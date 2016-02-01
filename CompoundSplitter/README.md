@@ -32,17 +32,18 @@ There are several configurations to be considered, when executing the compound s
 - `-al` - spaces will be added before each root, each root (with possible suffices) will be replaced with a corresponding lemma, and the splitting points will be marked with a `γ` symbol.
 
 Here is an example of the different compound splitting combinations:
----------- | -------------------------- | -------------- |
-Parameters | Interpretation             | Example        |
----------- | -------------------------- | -------------- |
-\-         | Original word              | paarikümne     |
-No         | `(word )+word`             | paari kümne    |
-`-a`       | `wordγ (wordγ )*γword`     | paariγ γkümne  |
-`-f`       | `(lemma )+word`            | paar kümne     |
-`-af`      | `lemmaγ (γlemmaγ )*γword`  | paarγ γkümne   |
-`-l`       | `(lemma )+lemma`           | paar kümmend   |
-`-al`      | `lemmaγ (γlemmaγ )*γlemma` | paarγ γkümmend |
----------- | -------------------------- | -------------- |
+
+| ---------- | -------------------------- | -------------- |
+| Parameters | Interpretation             | Example        |
+| ---------- | -------------------------- | -------------- |
+| \-         | Original word              | paarikümne     |
+| No         | `(word )+word`             | paari kümne    |
+| `-a`       | `wordγ (wordγ )*γword`     | paariγ γkümne  |
+| `-f`       | `(lemma )+word`            | paar kümne     |
+| `-af`      | `lemmaγ (γlemmaγ )*γword`  | paarγ γkümne   |
+| `-l`       | `(lemma )+lemma`           | paar kümmend   |
+| `-al`      | `lemmaγ (γlemmaγ )*γlemma` | paarγ γkümmend |
+| ---------- | -------------------------- | -------------- |
 
 > **Note:**
 > The input data for the compound splitter should be encoded in UTF-8 without the BOM marker. Otherwise, the compound splitter will not perform correctly.
