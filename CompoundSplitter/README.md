@@ -42,7 +42,6 @@ Here is an example of the different compound splitting combinations:
 | `-af`      | `lemmaγ (γlemmaγ )*γword`  | paarγ γkümne   |
 | `-l`       | `(lemma )+lemma`           | paar kümmend   |
 | `-al`      | `lemmaγ (γlemmaγ )*γlemma` | paarγ γkümmend |
-| ---------- | -------------------------- | -------------- |
 
 > **Note:**
 > The input data for the compound splitter should be encoded in UTF-8 without the BOM marker. Otherwise, the compound splitter will not perform correctly.
