@@ -33,7 +33,6 @@ There are several configurations to be considered, when executing the compound s
 
 Here is an example of the different compound splitting combinations:
 
-| ---------- | -------------------------- | -------------- |
 | Parameters | Interpretation             | Example        |
 | ---------- | -------------------------- | -------------- |
 | \-         | Original word              | paarikümne     |
