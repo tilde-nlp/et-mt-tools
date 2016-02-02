@@ -1,7 +1,5 @@
 # Estonian Compound Word Splitting for SMT
 
-Work In Progress!!! Read at your own risk
-
 This document describes the SMT system developement scenarios with the compound splitting tools provided in the **bEstMT-tools** repository.
 
 ##The Simple System Scenario
