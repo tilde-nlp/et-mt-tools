@@ -1,6 +1,6 @@
 # Estonian Compound Word Splitting for SMT
 
-This document describes the SMT system developement scenarios with the compound splitting tools provided in the **bEstMT-tools** repository.
+This document describes the SMT system developement scenarios with the compound splitting tools provided in the **bEstMT-tools** repository that have been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** (further named as **bEstMT**) of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
 
 ##The Simple System Scenario
 

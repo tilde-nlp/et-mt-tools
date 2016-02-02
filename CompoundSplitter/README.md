@@ -1,6 +1,6 @@
 #Estonian Morphological Analysis Based Compound Splitter
 
-The Estonian Morphological Analysis Based Compound Splitter (**et_split_compounds**) has been developed within the project **Riiklik programm "Eesti keeletehnoloogia (2011-2017)** (further named as **bEstMT**).
+The Estonian Morphological Analysis Based Compound Splitter (**et_split_compounds**) has been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** (further named as **bEstMT**) of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
 
 ##Build Instructions
 
