@@ -17,10 +17,13 @@ This command will create the `et_split_compounds` executable.
 The compound splitter can be executed using the following command line:
 
 ```
-./et_split_compounds [DictionaryPath] [Configuration] < [InputFile] > [OutputFile]
+./et_split_compounds [DictionaryDirectoryPath] [Configuration] < [InputFile] > [OutputFile]
 ```
 
-The `[DictionaryPath]` is the path to the dictionary `et.dct` of the **vabamorf** morphological analyser (the relative path is `dct/binary/et.dct`).
+The `[DictionaryDirectoryPath]` is the directory path of the dictionary `et.dct` of the **vabamorf** morphological analyser (the relative path is `dct/binary`).
+
+> **Note:**
+> The tool will not work if you will specify for the `[DictionaryDirectoryPath]` parameter the path to the dictionary file instead of the directory where the file is located.
 
 There are several configurations to be considered, when executing the compound splitter. The following configurations are available:
 
