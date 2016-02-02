@@ -17,4 +17,5 @@ The repository contains the following tools:
 
 Further information regarding each of the tools (including execution instructions) can be acquired by following the links above.
 
-SMT system training and evaluation scenarios for the experiments with compound splitting are described [here](CompoundSplittingScenarios.md).
+SMT system development scenarios for the experiments with compound splitting are described [here](CompoundSplittingScenarios.md).
+SMT system development scenarios for the experiments with phrase table triangulation are described [here](PhraseTableTriangulationScenarios.md).
