@@ -1,6 +1,6 @@
 #Compound Word Processing Tools
 
-The Estonian Compound Word Processing Tools have been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** (further named as **bEstMT**) of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
+The Estonian Compound Word Processing Tools have been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
 
 The toolkit consists of three tools:
 

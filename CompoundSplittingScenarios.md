@@ -1,13 +1,13 @@
 # Estonian Compound Word Splitting for SMT
 
-This document describes the SMT system developement scenarios with the compound splitting tools provided in the **bEstMT-tools** repository that have been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** (further named as **bEstMT**) of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
+This document describes the SMT system developement scenarios with the compound splitting tools provided in the **et-mt-tools** repository that have been developed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
 
 ##The Simple System Scenario
 
 The simplest scenario that ensures that compound words will be translated (*as long as their comprising words are present in the parallel training data*) is to split all compound words prior to SMT system training on the source side of the training data as well as in the source text prior to translation.
 
 > **Note:**
-> It is clear (and experiment results from the bEstMT project support this) that splitting all compound words may not be productive as there are frequently occurring compound words in the training data and we loose important information when splitting up compound words (especially if the compound words in a split form comprise a phrase of a different meaning). This issue is addressed further down. However, we will ignore this issue for now to show how to apply the compound splitting tools.
+> It is clear (and experiment results from the project support this) that splitting all compound words may not be productive as there are frequently occurring compound words in the training data and we loose important information when splitting up compound words (especially if the compound words in a split form comprise a phrase of a different meaning). This issue is addressed further down. However, we will ignore this issue for now to show how to apply the compound splitting tools.
 
 To train an SMT system that handles split compounds, you need to:
 

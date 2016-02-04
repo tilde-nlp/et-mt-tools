@@ -1,12 +1,12 @@
 # Phrase Table Triangulation for SMT
 
-This document describes the SMT system developement scenarios with phrase table triangulation that have been analysed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** (further named as **bEstMT**) of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
+This document describes the SMT system developement scenarios with phrase table triangulation that have been analysed within the project **EKT63 Eesti masintõlke kvaliteedi parendamine keeleteadmiste abil** of the program **Riiklik programm "Eesti keeletehnoloogia (2011-2017)**.
 
-Within the scope of the *bEstMT* project, we investigated different phrase table triangulation and merging methods that would allow us to create better quality SMT systems for language pairs for which there are limited amounts of parallel data available. One such language pair is Estonian-Russian. Further we describe how to create SMT systems with triangulated phrase tables with the Moses SMT system.
+Within the scope of the project, we investigated different phrase table triangulation and merging methods that would allow us to create better quality SMT systems for language pairs for which there are limited amounts of parallel data available. One such language pair is Estonian-Russian. Further we describe how to create SMT systems with triangulated phrase tables with the Moses SMT system.
 
 ## Pivot Language
 
-At first, you have to decide, which language will you use as the pivot language. There are two factors to consider: 1) which are the possible pivot languages for which you have the most parallel data (source-to-pivot and pivot-to-target) available, and 2) are the languages similar in terms of morphology and sentence structure to either the source or the target language. If the languages will differ too much in terms of morphology ans sentence structure, you risk loosing information or introducing a lot of noise due to pivoting. Having said that, in the *bEstMT* project, the only viable option was English, because for other potential pivot languages there were simply not enough parallel data available to train acceptable quality SMT systems.
+At first, you have to decide, which language will you use as the pivot language. There are two factors to consider: 1) which are the possible pivot languages for which you have the most parallel data (source-to-pivot and pivot-to-target) available, and 2) are the languages similar in terms of morphology and sentence structure to either the source or the target language. If the languages will differ too much in terms of morphology ans sentence structure, you risk loosing information or introducing a lot of noise due to pivoting. Having said that, in the project, the only viable option was English, because for other potential pivot languages there were simply not enough parallel data available to train acceptable quality SMT systems.
 
 ## Source-to-Pivot and Pivot-to-Source Phrase Tables
 
@@ -55,7 +55,7 @@ python tmtriangulate.py features_based -m sppt \
 
 ## Phrase Table Merging
 
-Within the scope of the *bEstMT* project we analysed the performance of SMT systems using phrase tables trained on direct source-to-target parallel corpora, just the triangulated phrase table (which obviously achieved significantly lower scores), and phrase tables that were acquired using different phrase table merging techniques. In our experiments we investigated:
+Within the scope of the project we analysed the performance of SMT systems using phrase tables trained on direct source-to-target parallel corpora, just the triangulated phrase table (which obviously achieved significantly lower scores), and phrase tables that were acquired using different phrase table merging techniques. In our experiments we investigated:
 
 - the method by Sennrich (2012) that is implemented in the [tmcombine](https://github.com/moses-smt/mosesdecoder/tree/master/contrib/tmcombine) tool that is available from the Moses repository.
 
