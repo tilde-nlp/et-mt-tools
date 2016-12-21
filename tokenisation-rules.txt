@@ -1,0 +1,802 @@
+[alphabet]
+# http://en.wikipedia.org/wiki/Basic_Latin_(Unicode_block)
+$latin_lower$ = [a-z]
+$latin_upper$ = [A-Z]
+$latin$       = [A-Za-z]
+
+# http://en.wikipedia.org/wiki/Latin-1_Supplement_(Unicode_block)
+$latin1_upper$ = [\u00C0-\u00D6\u00D8-\u00DE]
+$latin1_lower$ = [\u00DF-\u00F6\u00F8-\u00FF]
+$latin1$       = ($latin1_upper$ | $latin1_lower$)
+
+# http://en.wikipedia.org/wiki/Latin_Extended-A
+$latinA$       = [\u0100-\u017F]
+
+# http://en.wikipedia.org/wiki/Latin_Extended-B
+$latinB$ = [\u0180-\u024F]
+
+# http://en.wikipedia.org/wiki/Latin_Extended-C
+$latinC$ = [\u2C60-\u2C6f\u2C70-\u2C7f]
+
+# http://en.wikipedia.org/wiki/Latin_Extended_Additional
+$latin_additional$ = [\u1E00-\u1EFF]
+
+# http://en.wikipedia.org/wiki/Greek_and_Coptic
+# http://en.wikipedia.org/wiki/Greek_Extended
+$greek$ = [\u1F00-\u1FFF\u0370-\u03FF]
+
+# http://en.wikipedia.org/wiki/Cyrillic_script_in_Unicode
+$cyrillic_upper$ = [\u0400-\u042f]
+$cyrillic_lower$ = [\u0430-\u045f]
+$cyrillic$ = [\u0400-\u0481\u0500-\u052f\u2de0-\u2dff\ua640-\ua69f\u1d2b-\u1d78]
+
+# http://en.wikipedia.org/wiki/CJK_Unified_Ideographs_(Unicode_block)
+# http://stackoverflow.com/a/11415841
+$cjk$ = [\u4E00-\u62FF\u6300-\u77FF\u7800-\u8CFF\u8D00-\u9FCC\u3400-\u4DB5\u20000-\u215FF\u21600-\u230FF\u23100-\u245FF\u24600-\u260FF\u26100-\u275FF\u27600-\u290FF\u29100-\u2A6DF\u2A700-\u2B734\u2B740-\u2B81D]
+
+# http://en.wikipedia.org/wiki/Arabic_script_in_Unicode
+$arabic$ = [\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff\ufb50-\ufdff\ufe70-\ufeff]
+
+$hindi$ = [\u0900-\u097F]
+
+$letter$         = ($latin$ | $latin1$ | $latinA$ | $latinB$ | $latinC$ | $latin_additional$ | $cyrillic$ | $greek$ | $arabic$ | $hindi$)
+$letter_upper$   = ($latin_upper$ | $latin1_upper$ | $cyrillic_upper$)  # todo
+$letter_lower$   = ($latin_lower$ | $latin1_lower$ | $cyrillic_lower$)
+
+[whitespace]
+$lf$               = [\u000A]  # \n
+$cr$               = [\u000D]  # \r
+$tab$              = [\u0009]  # \t
+$space$            = [ ]
+$nbspace$          = [\u00A0]  # &nbsp; jeb &#160;
+$whitespace$       = ($lf$ | $cr$ | $tab$ | $space$ | $nbspace$)
+$newline$          = (($cr$$lf$) | ($lf$))
+$newline_win$      = ($cr$$lf$)
+$newline_linux$    = ($lf$)
+
+[numbers]
+$digit$            = [0-9]
+$digit_hex_upper$  = [0-9A-F]
+$digit_hex_lower$  = [0-9a-f]
+$digit_hex$        = [0-9A-Fa-f]
+
+$alphanum_upper$   = ($digit$ | $letter_upper$)
+$alphanum_lower$   = ($digit$ | $letter_lower$)
+$alphanum$         = ($alphanum_upper$ | $alphanum_lower$)
+$alphanum-$        = ($alphanum$ | [-–])
+$alphanum_$        = ($alphanum$ | [_])
+$alphadash$        = ($alphanum$ | [_-–])
+
+$number_ordinal$        = ($digit$+)                                                                 # 20000000
+$number_cardinal$       = (($digit$+ [.])(?!($newline$|($whitespace$+[A-Z]))))                       # 234.
+$number_floating$       = ([-+–]? $digit$+ [.,] $digit$+ ([(]$digit$+[)])?)                           # 3.14(15), -3,14
+$number_leadingdot$     = ([-+–]? [.] $digit$+ ([(]$digit$+[)])?)                                     # .3444, .344(545), -.123(456)
+$number_hex_hash6$      = ([#][0-9A-Fa-f]{6})                                                        #  #FFAA33, #ffffff
+$number_hex_num$        = ([0-9][0-9A-F]{3,})                                                        #  00FF, 00FF00
+$number_hex_prefix$     = ([0][xX] [0-9][0-9A-F]{2,})                                                #  0x00 0x03424
+$number_hex$            = ($number_hex_num$ | $number_hex_hash6$ | $number_hex_prefix$)
+$number_groups$         = ($digit${1,4} ([`',. ]$digit${2,4})+ ([.,]$digit$+)?)                      # 1'000'000, 1,222,333.44
+$number_math$           = ([-+–]? $digit$+ ([.] $digit$+)? ([eE] [-+–]? $digit$+)?)                    # -123.4e12, -1e3
+$number_perc$           = ([+-–]? $digit$+ ([.,] $digit$+)? [%])                                      # -45.44%
+$number$                = ($number_ordinal$ | $number_floating$ | $number_leadingdot$ | $number_math$ | $number_hex$)
+
+
+[dates]
+$year4$     = (((19) | (20)) [0-9]{2})                 # 1900-2099
+$year2$     = ([0-9]{2})
+$year2or4$  = ($year4$ | $year2$)
+$month$     = (([0-9]) | (1[0-2]) | ([0][0-9]))        # 1..12, 00..09
+$day$       = (([0-9]) | ([0-2][0-9]) | (3[0-1]))      # 1..31, 00..31
+$hour$      = (([01][0-9]) | (2[0-3]))                 # 00..24
+$hour1$     = (([0-9]) | ([01][0-9]) | (2[0-3]))       # 00..24, 1..24
+$minute$    = ([0-5][0-9])                             # 00..59
+$second$    = $minute$                                 # 00..59
+$am-pm$     = ([aApP] [.]? [mM] [.]?)              # am., a.m., am
+$date_dash$      = ($year4$[-]$month$[-]$day$)          # 2014-01-01
+$date_dash_rev$  = ($day$[-]$month$[-]$year2or4$)          # 01-01-2014
+$date_dot$       = ($year2or4$ [.] $month$ [.] $day$ [.]?)  # 2014.01.01
+$date_dot_rev$   = ($day$ [.] $month$ [.] $year2or4$ [.]?)  # 01.01.2014
+$date_slash$     = ($year2or4$[/]$month$[/]$day$)          # 2014/01/01
+$date_slash_rev$ = ($day$[/]$month$[/]$year2or4$)          # 01/01/2014
+$date_fwslash_rev$ = ($day$[\]$month$[\]$year2or4$)          # 01/01/2014
+$date_us_slash$  = ($month$[/]$day$[/]$year2or4$)          # 01/25/2014 United States
+$date_us_dot$    = ($month$[.]$day$[.]$year2or4$[.]?)          # 01/25/2014 United States
+$date_month$     = ($year4$[-]((Jan)|(Feb)|(Mar)|(Apr)|(May)|(Jun)|(Jul)|(Aug)|(Sep)|(Oct)|(Nov)|(Dec))[-]$day$)          # 2014-Nov-1
+$date$           = ($date_dash$ | $date_dash_rev$ | $date_dot$ | $date_dot_rev$ | $date_slash$ | $date_slash_rev$ | $date_month$ | $date_us_slash$ | $date_us_dot$ | $date_fwslash_rev$)
+
+$time$           = ($hour$ [:] $minute$ ([:]$second$)?)     # 14:30, 14:30:55
+$time1$          = ($hour1$ [:] $minute$ ([:]$second$)?)     # 14:30, 14:30:55
+$time-ampm$      = ($time1$ $space$? $am-pm$)                # 14:22:21 pm.
+$time-ampm-short$ = ($hour1$ $space$? $am-pm$)                # 14 pm., 12AM
+$isodatetime$    = ($date_dash$ T $time$)                   # 2014-04-05T14:23, 2014-04-05T14:23:55
+$dates$          = ($date$ | $isodatetime$)
+$times$          = ($time1$ | $time$ | $time-ampm$ | $time-ampm-short$)
+
+[networking]
+$0..255$         = ([0-9] | ([1-9][0-9]) | (1[0-9][0-9]) | (2[0-4][0-9]) | (25[0-5]) )          # 0, 19, 199, 249, 255 but not 012, 009
+$ipv4$           = ($0..255$ [.] $0..255$ [.] $0..255$ [.] $0..255$)                            # 127.0.0.1
+$ipv6$      = (([:] $digit_hex$*)+)                                                              # ::ff:ab12, :::1, todo: max length
+$hostname$       = ($ipv4$ | $ipv6$)
+
+[url]
+$tld_lower$      = ((com)|(org)|(net)|(int)|(edu)|(gov)|(mil)|(ac)|(ad)|(ae)|(af)|(ag)|(ai)|(al)|(am)|(an)|(ao)|(aq)|(ar)|(as)|(at)|(au)|(aw)|(ax)|(az)|(ba)|(bb)|(bd)|(be)|(bf)|(bg)|(bh)|(bi)|(bj)|(bm)|(bn)|(bo)|(br)|(bs)|(bt)|(bv)|(bw)|(by)|(bz)|(ca)|(cc)|(cd)|(cf)|(cg)|(ch)|(ci)|(ck)|(cl)|(cm)|(cn)|(co)|(cr)|(cs)|(cu)|(cv)|(cw)|(cx)|(cy)|(cz)|(dd)|(de)|(dj)|(dk)|(dm)|(do)|(dz)|(ec)|(ee)|(eg)|(eh)|(er)|(es)|(et)|(eu)|(fi)|(fj)|(fk)|(fm)|(fo)|(fr)|(ga)|(gb)|(gd)|(ge)|(gf)|(gg)|(gh)|(gi)|(gl)|(gm)|(gn)|(gp)|(gq)|(gr)|(gs)|(gt)|(gu)|(gw)|(gy)|(hk)|(hm)|(hn)|(hr)|(ht)|(hu)|(id)|(ie)|(il)|(im)|(in)|(io)|(iq)|(ir)|(is)|(it)|(je)|(jm)|(jo)|(jp)|(ke)|(kg)|(kh)|(ki)|(km)|(kn)|(kp)|(kr)|(kw)|(ky)|(kz)|(la)|(lb)|(lc)|(li)|(lk)|(lr)|(ls)|(lt)|(lu)|(lv)|(ly)|(ma)|(mc)|(md)|(me)|(mg)|(mh)|(mk)|(ml)|(mm)|(mn)|(mo)|(mp)|(mq)|(mr)|(ms)|(mt)|(mu)|(mv)|(mw)|(mx)|(my)|(mz)|(na)|(nc)|(ne)|(nf)|(ng)|(ni)|(nl)|(no)|(np)|(nr)|(nu)|(nz)|(om)|(pa)|(pe)|(pf)|(pg)|(ph)|(pk)|(pl)|(pm)|(pn)|(pr)|(ps)|(pt)|(pw)|(py)|(qa)|(re)|(ro)|(rs)|(ru)|(rw)|(sa)|(sb)|(sc)|(sd)|(se)|(sg)|(sh)|(si)|(sj)|(sk)|(sl)|(sm)|(sn)|(so)|(sr)|(ss)|(st)|(su)|(sv)|(sx)|(sy)|(sz)|(tc)|(td)|(tf)|(tg)|(th)|(tj)|(tk)|(tl)|(tm)|(tn)|(to)|(tp)|(tr)|(tt)|(tv)|(tw)|(tz)|(ua)|(ug)|(uk)|(us)|(uy)|(uz)|(va)|(vc)|(ve)|(vg)|(vi)|(vn)|(vu)|(wf)|(ws)|(ye)|(yt)|(yu)|(za)|(zm)|(zr)|(zw)|(academy)|(accountants)|(actor)|(aero)|(agency)|(archi)|(associates)|(attorney)|(audio)|(bar)|(bargains)|(beer)|(bid)|(bike)|(bio)|(biz)|(black)|(blackfriday)|(blue)|(boutique)|(build)|(builders)|(buzz)|(cab)|(camera)|(camp)|(capital)|(cards)|(care)|(careers)|(cash)|(catering)|(center)|(ceo)|(cheap)|(christmas)|(church)|(city)|(claims)|(cleaning)|(clinic)|(clothing)|(club)|(codes)|(coffee)|(college)|(community)|(company)|(computer)|(condos)|(construction)|(consulting)|(contractors)|(cooking)|(cool)|(coop)|(country)|(credit)|(creditcard)|(cruises)|(dance)|(date)|(dating)|(deals)|(democrat)|(dental)|(desi)|(diamonds)|(digital)|(direct)|(directory)|(discount)|(domains)|(education)|(email)|(engineering)|(enterprises)|(equipment)|(estate)|(events)|(exchange)|(expert)|(exposed)|(fail)|(farm)|(finance)|(financial)|(fish)|(fishing)|(fitness)|(flights)|(florist)|(foo)|(foundation)|(fund)|(furniture)|(futbol)|(gallery)|(gift)|(glass)|(global)|(gop)|(graphics)|(gratis)|(gripe)|(guide)|(guitars)|(guru)|(haus)|(hiphop)|(hiv)|(holdings)|(holiday)|(horse)|(host)|(house)|(immobilien)|(industries)|(info)|(ink)|(institute)|(insure)|(international)|(investments)|(jetzt)|(jobs)|(juegos)|(kaufen)|(kitchen)|(kim)|(land)|(lawyer)|(lease)|(life)|(lighting)|(limited)|(limo)|(link)|(loans)|(ltda)|(luxury)|(maison)|(management)|(marketing)|(media)|(menu)|(mobi)|(moda)|(moe)|(museum)|(name)|(ninja)|(onl)|(organic)|(partners)|(parts)|(photo)|(photography)|(photos)|(pics)|(pictures)|(pink)|(place)|(plumbing)|(post)|(press)|(pro)|(productions)|(products)|(properties)|(pub)|(recipes)|(red)|(reise)|(reisen)|(ren)|(rentals)|(repair)|(report)|(republican)|(rest)|(reviews)|(rich)|(rocks)|(rodeo)|(schule)|(services)|(sexy)|(shiksha)|(shoes)|(singles)|(social)|(solar)|(solutions)|(space)|(supplies)|(supply)|(support)|(surf)|(surgery)|(systems)|(tattoo)|(tax)|(technology)|(tel)|(tienda)|(tips)|(today)|(tools)|(town)|(toys)|(trade)|(training)|(travel)|(university)|(uno)|(vacations)|(versicherung)|(ventures)|(viajes)|(villas)|(vision)|(vodka)|(voting)|(voyage)|(wang)|(watch)|(webcam)|(website)|(wed)|(wiki)|(works)|(wtf)|(xxx)|(xyz)|(zone)|(asia)|(bayern)|(berlin)|(brussels)|(bzh)|(capetown)|(cat)|(cologne)|(durban)|(eus)|(frl)|(gal)|(hamburg)|(joburg)|(kiwi)|(koeln)|(london)|(melbourne)|(moscow)|(nagoya)|(nyc)|(paris)|(quebec)|(ruhr)|(scot)|(tokyo)|(vegas)|(vlaanderen)|(wien)|(yokohama)|(axa)|(bmw)|(citic)|(frogans)|(globo)|(mango)|(mini)|(monash)|(neustar)|(ovh)|(scb)|(yandex))
+$tld_upper$      = ((COM)|(ORG)|(NET)|(INT)|(EDU)|(GOV)|(MIL)|(AC)|(AD)|(AE)|(AF)|(AG)|(AI)|(AL)|(AM)|(AN)|(AO)|(AQ)|(AR)|(AS)|(AT)|(AU)|(AW)|(AX)|(AZ)|(BA)|(BB)|(BD)|(BE)|(BF)|(BG)|(BH)|(BI)|(BJ)|(BM)|(BN)|(BO)|(BR)|(BS)|(BT)|(BV)|(BW)|(BY)|(BZ)|(CA)|(CC)|(CD)|(CF)|(CG)|(CH)|(CI)|(CK)|(CL)|(CM)|(CN)|(CO)|(CR)|(CS)|(CU)|(CV)|(CW)|(CX)|(CY)|(CZ)|(DD)|(DE)|(DJ)|(DK)|(DM)|(DO)|(DZ)|(EC)|(EE)|(EG)|(EH)|(ER)|(ES)|(ET)|(EU)|(FI)|(FJ)|(FK)|(FM)|(FO)|(FR)|(GA)|(GB)|(GD)|(GE)|(GF)|(GG)|(GH)|(GI)|(GL)|(GM)|(GN)|(GP)|(GQ)|(GR)|(GS)|(GT)|(GU)|(GW)|(GY)|(HK)|(HM)|(HN)|(HR)|(HT)|(HU)|(ID)|(IE)|(IL)|(IM)|(IN)|(IO)|(IQ)|(IR)|(IS)|(IT)|(JE)|(JM)|(JO)|(JP)|(KE)|(KG)|(KH)|(KI)|(KM)|(KN)|(KP)|(KR)|(KW)|(KY)|(KZ)|(LA)|(LB)|(LC)|(LI)|(LK)|(LR)|(LS)|(LT)|(LU)|(LV)|(LY)|(MA)|(MC)|(MD)|(ME)|(MG)|(MH)|(MK)|(ML)|(MM)|(MN)|(MO)|(MP)|(MQ)|(MR)|(MS)|(MT)|(MU)|(MV)|(MW)|(MX)|(MY)|(MZ)|(NA)|(NC)|(NE)|(NF)|(NG)|(NI)|(NL)|(NO)|(NP)|(NR)|(NU)|(NZ)|(OM)|(PA)|(PE)|(PF)|(PG)|(PH)|(PK)|(PL)|(PM)|(PN)|(PR)|(PS)|(PT)|(PW)|(PY)|(QA)|(RE)|(RO)|(RS)|(RU)|(RW)|(SA)|(SB)|(SC)|(SD)|(SE)|(SG)|(SH)|(SI)|(SJ)|(SK)|(SL)|(SM)|(SN)|(SO)|(SR)|(SS)|(ST)|(SU)|(SV)|(SX)|(SY)|(SZ)|(TC)|(TD)|(TF)|(TG)|(TH)|(TJ)|(TK)|(TL)|(TM)|(TN)|(TO)|(TP)|(TR)|(TT)|(TV)|(TW)|(TZ)|(UA)|(UG)|(UK)|(US)|(UY)|(UZ)|(VA)|(VC)|(VE)|(VG)|(VI)|(VN)|(VU)|(WF)|(WS)|(YE)|(YT)|(YU)|(ZA)|(ZM)|(ZR)|(ZW)|(ACADEMY)|(ACCOUNTANTS)|(ACTOR)|(AERO)|(AGENCY)|(ARCHI)|(ASSOCIATES)|(ATTORNEY)|(AUDIO)|(BAR)|(BARGAINS)|(BEER)|(BID)|(BIKE)|(BIO)|(BIZ)|(BLACK)|(BLACKFRIDAY)|(BLUE)|(BOUTIQUE)|(BUILD)|(BUILDERS)|(BUZZ)|(CAB)|(CAMERA)|(CAMP)|(CAPITAL)|(CARDS)|(CARE)|(CAREERS)|(CASH)|(CATERING)|(CENTER)|(CEO)|(CHEAP)|(CHRISTMAS)|(CHURCH)|(CITY)|(CLAIMS)|(CLEANING)|(CLINIC)|(CLOTHING)|(CLUB)|(CODES)|(COFFEE)|(COLLEGE)|(COMMUNITY)|(COMPANY)|(COMPUTER)|(CONDOS)|(CONSTRUCTION)|(CONSULTING)|(CONTRACTORS)|(COOKING)|(COOL)|(COOP)|(COUNTRY)|(CREDIT)|(CREDITCARD)|(CRUISES)|(DANCE)|(DATE)|(DATING)|(DEALS)|(DEMOCRAT)|(DENTAL)|(DESI)|(DIAMONDS)|(DIGITAL)|(DIRECT)|(DIRECTORY)|(DISCOUNT)|(DOMAINS)|(EDUCATION)|(EMAIL)|(ENGINEERING)|(ENTERPRISES)|(EQUIPMENT)|(ESTATE)|(EVENTS)|(EXCHANGE)|(EXPERT)|(EXPOSED)|(FAIL)|(FARM)|(FINANCE)|(FINANCIAL)|(FISH)|(FISHING)|(FITNESS)|(FLIGHTS)|(FLORIST)|(FOO)|(FOUNDATION)|(FUND)|(FURNITURE)|(FUTBOL)|(GALLERY)|(GIFT)|(GLASS)|(GLOBAL)|(GOP)|(GRAPHICS)|(GRATIS)|(GRIPE)|(GUIDE)|(GUITARS)|(GURU)|(HAUS)|(HIPHOP)|(HIV)|(HOLDINGS)|(HOLIDAY)|(HORSE)|(HOST)|(HOUSE)|(IMMOBILIEN)|(INDUSTRIES)|(INFO)|(INK)|(INSTITUTE)|(INSURE)|(INTERNATIONAL)|(INVESTMENTS)|(JETZT)|(JOBS)|(JUEGOS)|(KAUFEN)|(KITCHEN)|(KIM)|(LAND)|(LAWYER)|(LEASE)|(LIFE)|(LIGHTING)|(LIMITED)|(LIMO)|(LINK)|(LOANS)|(LTDA)|(LUXURY)|(MAISON)|(MANAGEMENT)|(MARKETING)|(MEDIA)|(MENU)|(MOBI)|(MODA)|(MOE)|(MUSEUM)|(NAME)|(NINJA)|(ONL)|(ORGANIC)|(PARTNERS)|(PARTS)|(PHOTO)|(PHOTOGRAPHY)|(PHOTOS)|(PICS)|(PICTURES)|(PINK)|(PLACE)|(PLUMBING)|(POST)|(PRESS)|(PRO)|(PRODUCTIONS)|(PRODUCTS)|(PROPERTIES)|(PUB)|(RECIPES)|(RED)|(REISE)|(REISEN)|(REN)|(RENTALS)|(REPAIR)|(REPORT)|(REPUBLICAN)|(REST)|(REVIEWS)|(RICH)|(ROCKS)|(RODEO)|(SCHULE)|(SERVICES)|(SEXY)|(SHIKSHA)|(SHOES)|(SINGLES)|(SOCIAL)|(SOLAR)|(SOLUTIONS)|(SPACE)|(SUPPLIES)|(SUPPLY)|(SUPPORT)|(SURF)|(SURGERY)|(SYSTEMS)|(TATTOO)|(TAX)|(TECHNOLOGY)|(TEL)|(TIENDA)|(TIPS)|(TODAY)|(TOOLS)|(TOWN)|(TOYS)|(TRADE)|(TRAINING)|(TRAVEL)|(UNIVERSITY)|(UNO)|(VACATIONS)|(VERSICHERUNG)|(VENTURES)|(VIAJES)|(VILLAS)|(VISION)|(VODKA)|(VOTING)|(VOYAGE)|(WANG)|(WATCH)|(WEBCAM)|(WEBSITE)|(WED)|(WIKI)|(WORKS)|(WTF)|(XXX)|(XYZ)|(ZONE)|(ASIA)|(BAYERN)|(BERLIN)|(BRUSSELS)|(BZH)|(CAPETOWN)|(CAT)|(COLOGNE)|(DURBAN)|(EUS)|(FRL)|(GAL)|(HAMBURG)|(JOBURG)|(KIWI)|(KOELN)|(LONDON)|(MELBOURNE)|(MOSCOW)|(NAGOYA)|(NYC)|(PARIS)|(QUEBEC)|(RUHR)|(SCOT)|(TOKYO)|(VEGAS)|(VLAANDEREN)|(WIEN)|(YOKOHAMA)|(AXA)|(BMW)|(CITIC)|(FROGANS)|(GLOBO)|(MANGO)|(MINI)|(MONASH)|(NEUSTAR)|(OVH)|(SCB)|(YANDEX))
+$tld$            = ([.] ($tld_lower$ | $tld_upper$))
+$subdomain$      = ($alphanum$ ($alphanum$ | [-])* $alphanum$)                                     # starts with a letter, then alphanum or -, ends with alphanum
+$domain$         = ($subdomain$ ([.] $subdomain$)* $tld$)                                       # a, a.com, test.aaa.com
+$url_protocol$   = (((http) | (https) | (ftp) | (ftps) | (sftp) | (wap) | (scp) | (file) | (prospero) | (ldap)) (://))
+$url_username$   = ($alphanum$+)
+$url_password$   = ($alphanum$+)
+# user:pass
+$url_auth$       = ($url_username$ [:] $url_password$)
+$url_symbol$     = ($alphanum$ | [{}\=:\u002a-\u002f\u0023-\u0026\u005e-\u005f\u003f-\u0040])        #additional chars: {}=: *+,-./ #$%& ^_ ?@
+$url_normal$     = ($url_protocol$? ($url_auth$ @ | $url_username$ [:])? ($domain$|$ipv4$) ([/#\u003f] $url_symbol$*)?)
+$url_weird$      = ($url_protocol$ $url_symbol$*)    # http://; https://{4300}{4100}?id=255392&mkt=
+$url$            = ($url_normal$ | $url_weird$) (?![a-z])
+
+[email]
+$email_symbols$  = [.=?|~\u0021-\u0027\u002a-\u002b\u002d-\u002f\u005e-\u0060]   #[-+_=.!#%&'*/?^`|~$"]
+$email_username$ = ($alphanum$ ($email_symbols$ | $alphadash$)+ )        # vards.uzvards+spam
+$email$          = ($email_username$ @ $domain$)        # me@google.com, NOT: me@127.0.0.1
+
+[files]
+$control_chars$       = ([\u0000-\u0009]|[\u000b-\u000c]|[\u000e-\u001f]|\u007f|(\u00c2[\u0080-\u00a0])|(\u00c2\u00ad))
+$byte_order_mark$     = ([\ufeff]|[\ufffe]|(\u00ef\u00bb\u00bf))
+
+$extension_lower$ = ((acc)|(apk)|(avi)|(bak)|(bash_sh)|(bat)|(bat_sh)|(bks)|(bmp)|(bmp[-]f)|(bmp[-]S)|(box)|(bz2)|(cab)|(cdr)|(cer)|(cfg)|(cln)|(cmd)|(cnf)|(cnt)|(conf)|(config)|(cpp)|(css)|(csv)|(cvs)|(dat)|(datapool)|(db2)|(dbf)|(dbg)|(ddl)|(dll)|(dl)|(dmp)|(doc)|(docx)|(dotm)|(drv)|(dsx)|(dtd)|(dwg)|(ear)|(err)|(etc)|(evt)|(exe)|(expl)|(ext)|(fdl)|(flv)|(fnp)|(fnt)|(fvl)|(gid)|(gif)|(gif)|(glfh)|(gz)|(his)|(hlp)|(hod)|(hpp)|(hrf)|(htm)|(html)|(icm)|(inf)|(ini)|(inp)|(iso)|(jar)|(jardesc)|(java)|(jks)|(jpg)|(js)|(jsdt)|(jsp)|(kdb)|(kmz)|(lib)|(lfh)|(log)|(logsxml)|(lst)|(mdl)|(metadata)|(mf)|(mff)|(mgc)|(mlg)|(mp3)|(msg)|(msi)|(ndc)|(ndm)|(nn)|(nsf)|(ntf)|(opml)|(opt)|(out)|(p12)|(paa)|(pax)|(pcs)|(pdf)|(pdt)|(pem)|(perf)|(pkg)|(ppt)|(pptx)|(prefs)|(prn)|(py)|(rar)|(rdb)|(reg)|(rej)|(rpm)|(rsp)|(sample)|(ser)|(sh)|(sif)|(sis)|(sl)|(sql)|(sqlj)|(sqs)|(srt)|(sth)|(sxc)|(sys)|(tag)|(tagas)|(tar)|(target)|(tex)|(tgz)|(tld)|(tmp)|(trace)|(tvt)|(trc)|(trcdbxmi)|(trcxml)|(trg)|(ttt)|(txt)|(txtjet)|(upd)|(vbs)|(vhd)|(vis)|(war)|(wcp)|(wfid)|(wsdl)|(wsp)|(vxd)|(xdi)|(xfd)|(xhtml)|(xks)|(xll)|(xls)|(xlsx)|(xlt)|(xltx)|(xlw)|(xmi)|(xml)|(xmlcatalog)|(xpi)|(xsd)|(xsl)|(xsp)|(zip))
+$extension_upper$ = ((ACC)|(APK)|(AVI)|(BAK)|(BASH_SH)|(BAT)|(BAT_SH)|(BKS)|(BMP)|(BMP[-]F)|(BMP[-]S)|(BOX)|(BZ2)|(CAB)|(CDR)|(CER)|(CFG)|(CLN)|(CMD)|(CNF)|(CNT)|(CONF)|(CONFIG)|(CPP)|(CSS)|(CSV)|(CVS)|(DAT)|(DATAPOOL)|(DB2)|(DBF)|(DBG)|(DDL)|(DLL)|(DL)|(DMP)|(DOC)|(DOCX)|(DOTM)|(DRV)|(DSX)|(DTD)|(DWG)|(EAR)|(ERR)|(ETC)|(EVT)|(EXE)|(EXPL)|(EXT)|(FDL)|(FLV)|(FNP)|(FNT)|(FVL)|(GID)|(GIF)|(GIF)|(GLFH)|(GZ)|(HIS)|(HLP)|(HOD)|(HPP)|(HRF)|(HTM)|(HTML)|(ICM)|(INF)|(INI)|(INP)|(ISO)|(JAR)|(JARDESC)|(JAVA)|(JKS)|(JPG)|(JS)|(JSDT)|(JSP)|(KDB)|(KMZ)|(LIB)|(LFH)|(LOG)|(LOGSXML)|(LST)|(MDL)|(METADATA)|(MF)|(MFF)|(MGC)|(MLG)|(MP3)|(MSG)|(MSI)|(NDC)|(NDM)|(NN)|(NSF)|(NTF)|(OPML)|(OPT)|(OUT)|(P12)|(PAA)|(PAX)|(PCS)|(PDF)|(PDT)|(PEM)|(PERF)|(PKG)|(PPT)|(PPTX)|(PREFS)|(PRN)|(PY)|(RAR)|(RDB)|(REG)|(REJ)|(RPM)|(RSP)|(SAMPLE)|(SER)|(SH)|(SIF)|(SIS)|(SL)|(SQL)|(SQLJ)|(SQS)|(SRT)|(STH)|(SXC)|(SYS)|(TAG)|(TAGAS)|(TAR)|(TARGET)|(TEX)|(TGZ)|(TLD)|(TMP)|(TRACE)|(TVT)|(TRC)|(TRCDBXMI)|(TRCXML)|(TRG)|(TTT)|(TXT)|(TXTJET)|(UPD)|(VBS)|(VHD)|(VIS)|(WAR)|(WCP)|(WFID)|(WSDL)|(WSP)|(VXD)|(XDI)|(XFD)|(XHTML)|(XKS)|(XLL)|(XLS)|(XLSX)|(XLT)|(XLTX)|(XLW)|(XMI)|(XML)|(XMLCATALOG)|(XPI)|(XSD)|(XSL)|(XSP)|(ZIP))
+$extension$       = ($extension_lower$ | $extension_upper$)
+
+$linux_folders$   = ((app)|(bin(64)?)|(boot)|(default)|(cdrom)|(dev)|(etc)|(html)|(home)|(lib)|(lib32)|(lib64)|(lost[+]found)|(media)|(mnt)|(opt)|(proc)|(root)|(run)|(sbin)|(selinux)|(sys)|(srv)|(tmp)|(usr)|(var)|(AppServer)|(www))
+
+# Filenames: applet.jar, /appler.jar, appler.13-14._my.jar
+# Directorye cannot end with ".", becose it may be end of sentence
+$dirname$   = (($alphanum_$ (($alphadash$ | [.~\u02dc])* $alphadash$)?) | ([.]{2,3}))
+$filename$  = ($dirname$ [.] $extension$)
+
+$linux_sep$        = ([/\]{1,2})
+$linux_path_start$ = ( ([/] $linux_folders$)|([.]{1,3}) )
+$linux_path_full$  = ($linux_path_start$ ($linux_sep$ $dirname$)+ (($linux_sep$ $filename$) | $linux_sep$)?)
+$linux_path_fname$ = ([/]? ($dirname$ [/])* $filename$)
+$linux_path$       = ($linux_path_full$ | $linux_path_fname$ | ($linux_sep$ $linux_folders$ $linux_sep$?))
+
+$win_drive$  = ( ( (([A-Za-z])|(CD[-]ROM)|(DVD[-]ROM)|(drive)|(Drive[-]letter)) [:] ) | (%?((WinDir)|(ysdrive))%) )
+$win_sep$    = ([/\]{1,2})
+$win_dir$    = ($dirname$ | ((Program)[ ](files)) | ((Microsoft)[ ](Office)))
+$win_net$    = ([\][\] $win_dir$ ($win_sep$ $win_dir$)* $win_sep$? $filename$?)
+$win_local_full$  = ($win_drive$ $win_sep$? ( (($win_dir$ $win_sep$)+ ($win_dir$ | $filename$)?) | (($win_dir$ $win_sep$)* ($win_dir$ | $filename$)) ))
+$win_local$  = ( $win_sep$? ($win_dir$ $win_sep$)* $filename$ )
+$win_path$   = ($win_local_full$ | $win_local$ | $win_net$ | ($win_drive$ $win_sep$))
+
+
+# windows registry path
+$win_registry_start$ = (HKEY_((LOCAL_MACHINE)|(Local_Machine)|(CURRENT_USER)|(Current_User)|(CLASS_ROOT)|(USER)))|(HKCU)|(HKLM))
+$win_registry$ = ($win_registry_start$ ($win_sep$ $win_dir$)+ $win_sep$?)
+
+$file_path$  = ($linux_path$ | $win_path$ | $filename$ | $win_registry$)
+
+[xml]
+$xml-entity$         = &((#$digit$+ | x($digit$[a-f]*)+) | ($latin_lower$+ $digit$*));    # &#160; &#x20; &amp; &sup1; &frac14; &nbsp; &hearts;
+
+$xml-tagname$            = ($latin$ $alphadash$* ([:] $alphadash$+)?)
+$xml-attribute-val-char$ = ($letter$ | [-%#_0-9.!?:;\] | $space$)
+$xml-attribute-val-q$    = (["] $xml-attribute-val-char$+ ["])
+$xml-attribute-val-a$    = (['] $xml-attribute-val-char$+ ['])
+$xml-attribute-val$      = (($alphanum$+) | $xml-attribute-val-q$ | $xml-attribute-val-a$)
+$xml-attribute-eq$       = ($xml-tagname$ $space$* [=] $space$* $xml-attribute-val$)
+$xml-attribute-alone$    = ($alphadash$+)
+$xml-attribute$          = ($xml-attribute-eq$ | $xml-attribute-alone$)
+$xml-open$               = (<$xml-tagname$ ($space$+ $xml-attribute$)* $space$*>)
+$xml-close$              = (</$xml-tagname$>)
+$xml-empty$              = (<$xml-tagname$ ($space$+ $xml-attribute$)* $space$*/>)
+$xml-close-weird$        = (</$xml-tagname$ ($space$+ $xml-attribute$)* $space$*>)
+$xml-tag$                = ($xml-open$ | $xml-close$ | $xml-empty$ | $xml-close-weird$)
+
+[currencies]
+
+$currency_abbr$    = ((LS)|(Ls)|(RUB)|(AFN)|(ALL)|(GBP)|(GGP)|(DZD)|(EUR)|(AOA)|(XCD)|(ARS)|(AMD)|(AWG)|(SHP)|(AUD)|(AZN)|(BSD)|(BHD)|(BDT)|(BBD)|(BYR)|(BZD)|(XOF)|(BMD)|(BTN)|(INR)|(BOB)|(USD)|(BAM)|(BWP)|(BRL)|(BND)|(SGD)|(BGN)|(MMK)|(BIF)|(KHR)|(XAF)|(CAD)|(CVE)|(KYD)|(CLP)|(CNY)|(COP)|(KMF)|(CDF)|(NZD)|(CRC)|(HRK)|(CUC)|(CUP)|(ANG)|(CZK)|(DKK)|(DJF)|(DOP)|(EGP)|(ERN)|(ETB)|(FKP)|(FJD)|(XPF)|(GMD)|(GEL)|(GHS)|(GIP)|(GTQ)|(GNF)|(GYD)|(HTG)|(HNL)|(HKD)|(HUF)|(ISK)|(IDR)|(IRR)|(IQD)|(IMP)|(ILS)|(JMD)|(JPY)|(JEP)|(JOD)|(KZT)|(KES)|(KPW)|(KRW)|(KWD)|(KGS)|(LAK)|(LBP)|(LSL)|(ZAR)|(LRD)|(LYD)|(CHF)|(LTL)|(LVL)|(MOP)|(MKD)|(MGA)|(MWK)|(MYR)|(MVR)|(MRO)|(MUR)|(MXN)|(MDL)|(MNT)|(MAD)|(MZN)|(NAD)|(NPR)|(NIO)|(NGN)|(TRY)|(NOK)|(OMR)|(PKR)|(PAB)|(PGK)|(PYG)|(PEN)|(PHP)|(PLN)|(QAR)|(RON)|(RWF)|(WST)|(STD)|(SAR)|(RSD)|(SCR)|(SLL)|(SBD)|(SOS)|(SSP)|(LKR)|(SDG)|(SRD)|(SZL)|(SEK)|(SYP)|(TWD)|(TJS)|(TZS)|(THB)|(TOP)|(PRB)|(TTD)|(TND)|(TMT)|(UGX)|(UAH)|(AED)|(UYU)|(UZS)|(VUV)|(VEF)|(VND)|(YER)|(ZMW))
+$currency_words$   = ((euro) | (eiro) | (lati))
+
+$currency_num_rep$ = ($digit$+ ([ '`] | [.,])? $digit$+)+)                      # 100 000 000, 100 000.005
+$currency_num_1$   = ($digit$+)
+$currency_num$     = ($currency_num_rep$ | $currency_num_1$)
+$currency_prefix$  = ($currency_abbr$ $space$* $currency_num$)                        # EUR 100, EUR100
+$currency_suffix$  = ($currency_num$ $space$* ($currency_words$ | $currency_abbr$))   # 100EUR, 100 EUR, 100 euro
+$currency$         = ($currency_prefix$ | $currency_suffix$)
+
+[phones]
+$country_code$   = ( [(]? [+] [0-9]{1,3} [)]?)               # +371, (+371)
+$area_code$      = ([(] [0-9]{1,3} [)] ([ ][/])?)            # (800) , +1 (613) 599-4505, (089) / 636-48018
+$phone_prefix$   = ($country_code$ | $area_code$ | ($country_code$ $space$* $area_code$))
+$phone_groups$   = ([0-9]{1,5} ([ -] [0-9]{2,5}){1,5})       # 222, 222-222, 222 222 222
+$phone_digits$   = ($phone_groups$ | ([0-9]{6,12}))
+$phone_groups_2$   = ([0-9]{1,5} ([ -] [0-9]{2,5}){2,5})       # 222, 222-222-222, 222 222 222
+$phone_digits_2$   = ($phone_groups_2$ | ([0-9]{6,12}))
+$phone$          = ((($phone_prefix$ [ ]?)* [-]? $phone_digits_2$) | (($phone_prefix$ [ ]?)+ [-]? $phone_digits$))   # +371222, +371 222 , +49-89-636-48018
+
+[latvian]
+$latvian_abbr$ = ((janv[.]) | (pils[.]) | (t[.]p[.]) | (sek[.]) | (min[.]) | (val[.]) | (vsk[.]) | (vad[.]) | (poz[.]) | (raj[.]) | (sant[.]) | (prosp[.]) | (sept[.]) | (st[.]) | (jūn[.]) | (nov[.]) | (pārb[.]) | (piel[.]) | (mljrd[.]) | (iec[.]) | (dzīv[.]) | (vec[.]) | (galv[.]) | (gs[.]s[.]) | (jaun[.]) | (iedz[.]) | (inv[.]) | (inž[.]) | (ist[.]loc[.]) | (gs[.]b[.]) | (tūkst[.]) | (uzņ[.]) | (febr[.]) | (t[.]s[.]) | (dsk[.]) | (apg[.]) | (milj[.]) | (iesk[.]) | (att[.]) | (cet[.]) | (zīm[.]) | (u[.][ ]?c[.]) | (kgs[.]) | (gab[.]) | (lpp[.]) | (bulv[.]) | (tab[.]) | (dz[.]) | (utt[.]) | (u[.]tml[.]) | (tml[.]) | (aug[.]) | (sk[.]) | (spec[.]) | (apr[.]) | (jūl[.]) | (v[.]i[.]) | (vietn[.]) | (a[.]l[.]) | (dok[.]) | (dz[.]g[.]) | (piez[.]) | (maks[.]) | (rbl[.]) | (rbļ[.]) | (u[.]t[.]jpr[.]) | (vok[.]) | (vienk[.]) | (v[.]) | (skait[.]) | (okt[.]) | (mir[.]) | (kop[.]) | (virz[.]) | (med[.]) | (māksl[.]) | (mūz[.]) | (lit[.]) | (sr[.]) | (kap[.]) | (sertif[.]) | (akad[.]) | (poēt[.]) | (apkl[.]) | (kub[.]) | (ab[.]) | (krēj[.]) | (ēdamk[.]) | (tējk[.]) | (kab[.]) | (pārv[.]) | (apdroš[.]) | (soc[.]) | (sen[.]) | (sar[.]) | (folkl[.]) | (divd[.]) | (dat[.]) | (bezpers[.]) | (apv[.]) | (hum[.]) | (instr[.]) | (p[.]m[.]ē[.]) | (op[.]) | (g[.]) | (bazn[.]) | (nod[.]) | (kl[.]) | (kor[.]loc[.]) | (lauk[.]) | (līn[.]) | (apst[.]) | (niev[.]) | (pārn[.]) | (pak[.]) | (pag[.]) | (noz[.]) | (novec[.]) | (ģen[.]) | (nom[.]) | (pers[.]) | (nevēl[.]) | (lok[.]) | (lietv[.]) | (kopdz[.]) | (Ls[.]) | (vair[.]) | (Kr[.]) | (Dz[.]) | (nr[.]) | (izsauk[.]) | (mīlin[.]) | (pārej[.]) | (pamazin[.]) | (darb[.]) | (sal[.]) | (p[.]n[.]) | (siev[.]) | (resp[.]) | (t[.]sk[.]) | (visp[.]) | (vīr[.]) | (sast[.]) | (prof[.]) | (cien[.]) | (Nr[.]) | (bij[.]) | (ļ[.]cien[.]) | (eks[.]) | (Dr[.]) | (dr[.]) | (tel[.]) | (tālr[.]) | (piem[.]) | (god[.]) | (t[.]i[.]) | (š[.]g[.]) | (plkst[.]) | (a[.]god[.]) | (a[.]k[.]) | (p[.]k[.]) | (apm[.]) | (mob[.]) | (pied[.]) | (piepr[.]) | (prot[.]) | (dzim[.]) | (iepr[.]) | (P[.]S[.]) | (vid[.]) | (b[.]) | (ak[.]) | (nepārej[.]) | (nenot[.]) | (nelok[.]) | (īp[.]) | (not[.]) | ([Ss]kat[.]))
+
+[ids]
+$id_slash$          = (($digit$+ [.] ([/] $digit$+ [.])+) | ([XIVCMD]+ [/] [XIVCMD]+))   # 3./4., III/IV
+$id_underscore$   = ($alphanum$+ ([_]+ $alphanum$+ [_]*)+)
+$id_numlet$       = (($digit$+ [A-Fa-f]) (?! ($alphanum$) | ([.][mM][.]?)))     # 25a but not 25aa or 25am or 1|2am
+$id_excel_cell$   = ([A-Z]{1,2} [:] $digit$+)
+$id_excel_range$  = ([A-Z]{1,2} $digit$+ [:] [A-Z]{1,2} $digit$+)
+$id_let_dash_num$ = ([A-Z]{2,} [-] $digit$+ [A-Z]?)    # SR-1, HS-13W
+$id_num_dash_let$ = ($digit$+ [-]  [A-Z]+)    # 5-FU
+$id_at$           = ([@] ($alphanum$ | [@]) [@] $alphanum$+ )
+$id_numx$         = ($digit${1,3} [.] x)                           # 5.x
+$id_eu$           = ($digit$+ ($space$* [(] $alphanum$+ [)])+)     # 3(d), 3(d)(2)
+$id_eu_year$      = ($digit$+ [/] $digit$+ [/] $letter_upper$+ ([(] $digit$+ [)])?)     # 2004/49/EC
+$id_eu2$          = (($letter_upper$|$digit$)+ [/] $digit$+ ($space$* [(] $digit$+ [)])?)    # 1291/2000(9), 345/458
+$id_eu3$          = ($digit$+ [.] $digit$+ [(] $alphanum$+ [)])    # 4.20(d)
+$id_word_num$     = ($letter${2,} $digit$+)                  # CD4
+$id_num_word_num$     = ($digit$+ $letter_upper${1,4} $digit$+)                  # 2C9
+$id_num_word$     = ($digit$+ $letter_upper$+ $letter_lower$?)                  # 90Y, 153Sm
+$id_charparen$    = ([(] $latin$ [)])                              # (c) (D)
+$id_postal$       = ($letter$+ [-–] $digit$+ $letter$?)                # I-12345, rhBMP-2
+$id_eu_roman$     = ([XIVCMD]+ [.] $digit$+)                       # XXIV.6 
+$id_under_misc$   = ($alphanum$+ [_] $alphanum$+ [.] $alphanum$+)  # hr_m.hh
+$id_mixed_misc$   = ($letter_upper$+ $digit$+ $alphanum$+)             # P1FYyy
+$id_capdotnum$    = ($letter_upper${1,2} [.] $digit$+)              # B.6
+$id_iso$          = ((ISO) $space$* $digit$+ ($space$* [(] $digit$+ [)])?)  # ISO 123, ISO123, ISO 123 (1)
+$id_hex$          = (0 [xX] $digit_hex$+)
+$id_path$         = ($alphanum$+ ([_/#] $alphanum$+){2,} ([.] $latin_lower${3,})?)             # qtn_log_gprs_settings/logs#ave
+$id_guid_up$      = ($alphanum_upper${8} [-] $alphanum_upper${4} [-] $alphanum_upper${4} [-] $alphanum_upper${4} [-] $alphanum_upper${12})
+$id_guid_lw$      = ($alphanum_lower${8} [-] $alphanum_lower${4} [-] $alphanum_lower${4} [-] $alphanum_lower${4} [-] $alphanum_lower${12})
+$id_guid$         = ($id_guid_up$ | $id_guid_lw$)
+$id_num$          = (($digit$+ [.]){3,} $digit$+ [.]?)
+$id_other$         = ($letter_upper$+ ([/] [0-9-ζ]+)+ $digit$+)   #EU/1/99/126/013-015
+$id_chemistry$         = ($letter_upper$ $letter_lower$ $digit$)   #Ca2
+$id_upper_dash$         = ($letter_upper$+ $letter_lower$? ([-] $letter_upper$+)+)             # M-M-RVAXPRO
+$id$              = ( $id_underscore$ | $id_excel_cell$ | $id_excel_range$ | $id_let_dash_num$ | $id_num_dash_let$ | $id_at$ | $id_numx$ | $id_eu$ | $id_eu_year$ | $id_word_num$ | $id_charparen$ | $id_postal$ | $id_eu2$ | $id_eu_roman$ | $id_eu3$ | $id_under_misc$ | $id_mixed_misc$ | $id_capdotnum$ | $id_iso$ | $id_hex$ | $id_path$ | $id_guid$ | $id_num$ | $id_other$ | $id_chemistry$ | $id_num_word_num$ | $id_num_word$ | $id_upper_dash$ | $id_slash$)
+
+[placeholders]
+$placeholder_perc$    = ([%] ($alphanum$ | [!])+ [%]?)                                      # %123, %123abc %123%, %123!2!%
+$placeholder_perc_q$  = ( (['] $placeholder_perc$ [']) | (["] $placeholder_perc$ ["]) )     # '%xx', "%xx%"
+$placeholder_par$     = ([§] ($alphanum$ | [_])+ [§])
+$placeholder_under$   = ([_] $digit$+)
+$placeholder$         = ($placeholder_perc$ | $placeholder_perc_q$ | $placeholder_par$ | $placeholder_under$)
+
+[words]
+$word$        = ($letter$+)
+$hypen-digit$  = ($letter$+ [–—] $digit$+) # samaarium-123
+$word-mixed$  = ($alphanum$+ ([–—] $alphanum$+){2,}) #alfa-2b-peginterferoon, 25-O-desatsetüülrifabutiini
+$initials$    = (($letter_upper$ | (Dz) | (Dž)) [.] $space$* $letter_upper$ $letter$+)         # A. Bērziņš
+$numword$     = (($letter_upper$+ $digit$+)+)   # I39, CY2C9
+$mesurement_units$         = (([°][CF])|((([cdkµm][sm])|(ft)|(in)|(yd)|(mi)|(ha))[23]?)|([kµm]?((g)|(mol)|(l)|(Pa)|(J)|(W)|(N)))|(m[23])|(oz)|(lb[s]?)|(kWh)|(min)|(qt)|(gal)|(dl)|([k]?m/[sh][2]?)|([kµpm]?mol/[md]?l)|([kµmn]?g/(([md]?l)|(m2)|(m²)|([kµm]?g)))|([md]?l/((m2)|(min)|([kµm]?g))))            #  °C, °F, m3, kPa, lbs, m/s2, mol/l, mg/l
+
+[english-contractions]
+don't
+didn't
+doesn't
+isn't
+hasn't
+haven't
+hadn't
+wasn't
+weren't
+wouldn't
+won't
+couldn't
+can't
+shouldn't
+aren't
+
+[english-apos]
+'m
+'re
+'s
+'ve
+'d
+'ll
+'ll've
+'d've
+'t
+
+[est-endings]
+-i
+-it
+-d
+-l
+-le
+-ga
+-li
+-lit
+-se
+-st
+-t
+-u
+-ut
+
+[english-together]
+Adj.
+Adm.
+Adv.
+Asst.
+Bart.
+Bldg.
+Brig.
+Bros.
+Capt.
+Cmdr.
+Col.
+Comdr.
+Con.
+Corp.
+Cpl.
+DR.
+Dr.
+Drs.
+Ens.
+Gen.
+Gov.
+Hon.
+Hr.
+Hosp.
+Insp.
+Lt.
+MM.
+MR.
+MRS.
+MS.
+Maj.
+Messrs.
+Mlle.
+Mme.
+Mr.
+Mrs.
+Ms.
+Msgr.
+Op.
+Ord.
+Pfc.
+Ph.
+Prof.
+Pvt.
+Rep.
+Reps.
+Res.
+Rev.
+Rt.
+Sen.
+Sens.
+Sfc.
+Sgt.
+Sr.
+St.
+Supt.
+Surg.
+v.
+vs.
+v.s.
+i.e.
+rev.
+e.g.
+
+[other]
+
+# Bullets
+
+$bullet_num_nodot$    = ([0-9]+ ([.] [0-9]+){2,})         # 1.2.2, 1.2.3.4
+$bullet_num$     = (([0-9]+[.]){2,})                 # 1.2.3.4.
+
+# Punctuation
+
+$punct$             = [.,!?:–—]
+$punct_repeat$      = ([,!?:–—]{2,})
+$punct_repeat_dots$ = [.]{2,}
+$punct_par$         = [()]
+
+
+# Keep together
+
+$together_sym_circle$     = ( [(] (c | r | (tm)) [)]  )
+$together_term$           = ((C[+][+]) | ([.]NET))
+$together$                = ($together_sym_circle$ | $together_term$ | $latvian_abbr$)
+
+
+# NERs, NTTs
+
+$beta$ = \u03B2
+$together_ner$            = ($beta$ [A-Z]+ $beta$)
+$together_ner_extra$      = ($together_ner$ [A-Za-z0-9=+/$beta$]+)
+$ner$                     = ($together_ner$ | $together_ner_extra$)
+
+$memoq_id_sym$    = (([0-9]) | ([biu^]+))
+$memoq_id_start$  = ([{] $memoq_id_sym$ [>])
+$memoq_id_end$    = ([<] $memoq_id_sym$ [}])
+$memoq_id$        = ($memoq_id_start$ | $memoq_id_end$)
+
+$twitter_hashtag$  = ([#] [a-zA-Z][a-zA-Z0-9_]{1,10})
+$twitter_cashtag$  = ([$] [A-Z][A-Z0-9_]{1,10})
+$twitter_mention$  = ([@] [a-zA-Z][a-zA-Z0-9_]{1,10})
+
+$smiley$           = ([:;]-?[()DP]) (?!($alphadash$ | $punct$))
+
+$french_article$         = ( ([lLdDcCjJ] ') | ((qu|Qu) ') )  # l' d' qu'
+$french_article_middle$  = ($letter$+ ') (?=[aeiouAEIOUàáäâåìíîééèêėöôøœûüúyÀÁÄÂÅÌÍÎÉÉÈÊĖÖÔØŒÛÜÚYhH])
+
+$english-o$  = ([oO] ['] $letter$+)
+
+[!tokenizer]
+
+ner = $ner$
+# compile in 6 seconds
+email = $email$
+hashtag = $twitter_hashtag$
+cashtag = $twitter_cashtag$
+mention = $twitter_mention$
+
+# compile in 35 sec
+filepath = $file_path$
+
+date = $dates$
+time = $times$
+
+num-bullet = $bullet_num$
+num-bullet = $bullet_num_nodot$
+
+memoqstart = $memoq_id_start$
+memoqend = $memoq_id_end$
+xml = $xml-entity$
+xml = $xml-tag$
+placeholder = $placeholder$
+# compile in 1 sec
+num = $number$
+num = $number_groups$ (?![:])
+# compile in 1 sec
+id  = $id$
+id  = $id_numlet$
+currency = $currency$
+# compile in 1 sec
+phone = $phone$ (?![:])
+
+word = $together$
+word = $numword$
+word = $initials$
+word = $word$
+word = $word-mixed$
+word = $hypen-digit$
+word = $english-apos$ (?! $letter$)
+word = $english-o$
+word = $english-together$
+word = $est-endings$ (?! $letter$)
+word = $french_article$
+word = $french_article_middle$
+word = $mesurement_units$
+
+# compile in 35 sec
+url = $url$
+
+smiley = $smiley$
+
+newline = $newline$
+whitespace = $whitespace$+
+
+utfbom = $byte_order_mark$
+controlchars = $control_chars$
+
+punct = $punct_repeat_dots$
+punct = $punct_repeat$
+punct = $punct_par$
+punct = $punct$
+
+other = .
+
+[!tokenizer:tests]
+
+[!senttests]
+
+[!ntt]
+email => βEMAILβ
+num-bullet => βIDβ
+url => βURLβ
+filepath => βPATHβ
+id => βIDβ
+placeholder => βPLACEHOLDERβ
+date => βDATEβ
+time => βTIMEβ
+phone => βPHONEβ
+xml => βXMLβ
+memoqstart => βMEMOQSTARTβ
+memoqend => βMEMOQENDβ
+hashtag => βHASHTAGβ
+cashtag => βCASHTAGβ
+mention => βMENTIONβ
+smiley => βSMILEYβ
+memoqstart =>
+memoqend =>
+
+
+[!tokenizer:pre]
+xml = $xml-entity$
+xml = $xml-tag$
+other = .
+
+[!ntt:pre]
+xml => βXMLβ
+
+
+[localizer:tokenize:common]
+######################
+# This section contains regex variable definitions that are referenced in sections [!localizer:tokenize:<src_lang>] and [!localizer:tokenize:<trg_lang>].
+# The left hand side contains variable names. The right hand side contains regex expressions.
+# Variable occurances on the right side are replaced with the corresponding regex expressions when the expressions are parsed.
+# The regex is white-space insensitive. Python's regex module is used on the backend.
+######################
+
+$numberbasep$       = [+-]?(?: (?:(?!0\d)\d+(?:[,.]\d+)?) | (?:[1-9]\d{0,2}(?:[\s,.]\d{3})*(?:[,.]\d+)?))
+$startnumberp$      = (?<!\w[^\s≥><≤]) $numberbasep$
+$endnumberp$        = $numberbasep$ (?![^\s]?\w)
+$currencywordp$     = (?:LS|Ls|RUB|AFN|ALL|GBP|GGP|DZD|EUR|AOA|XCD|ARS|AMD|AWG|SHP|AUD|AZN|BSD|BHD|BDT|BBD|BYR|BZD|XOF|BMD|BTN|INR|BOB|USD|BAM|BWP|BRL|BND|SGD|BGN|MMK|BIF|KHR|XAF|CAD|CVE|KYD|CLP|CNY|COP|KMF|CDF|NZD|CRC|HRK|CUC|CUP|ANG|CZK|DKK|DJF|DOP|EGP|ERN|ETB|FKP|FJD|XPF|GMD|GEL|GHS|GIP|GTQ|GNF|GYD|HTG|HNL|HKD|HUF|ISK|IDR|IRR|IQD|IMP|ILS|JMD|JPY|JEP|JOD|KZT|KES|KPW|KRW|KWD|KGS|LAK|LBP|LSL|ZAR|LRD|LYD|CHF|LTL|LVL|MOP|MKD|MGA|MWK|MYR|MVR|MRO|MUR|MXN|MDL|MNT|MAD|MZN|NAD|NPR|NIO|NGN|TRY|NOK|OMR|PKR|PAB|PGK|PYG|PEN|PHP|PLN|QAR|RON|RWF|WST|STD|SAR|RSD|SCR|SLL|SBD|SOS|SSP|LKR|SDG|SRD|SZL|SEK|SYP|TWD|TJS|TZS|THB|TOP|PRB|TTD|TND|TMT|UGX|UAH|AED|UYU|UZS|VUV|VEF|VND|YER|ZMW)
+$currencysymbolp$   = (?:£|\$|€)
+$sepstartp$         = (?:^|(?<![^,.;:"“()\\|\s≥><≤~]))
+$sependtp$          = (?:$|(?=\r\n|\r|\n)|(?![^,.?!;:"”()\\|\s]))
+$currencyp$         = $currencywordp$ | $currencysymbolp$
+$currencypattern$      = (?:$sepstartp$ (?:(?:(?P<value> $startnumberp$ )\s*(?P<unit> $currencyp$ ))|(?:(?P<unit> $currencyp$ )\s*(?P<value> $endnumberp$ )))$sependtp$ )
+# imperial units are taken from https://en.wikipedia.org/wiki/United_States_customary_units
+$impunitp$          = (?:ft|yd|mi|oz|lb|lbs|short\ston|fl\soz|pt|qt|gal|sq\sft|ft2|sq\sch|ch2|mph|[°º]F|”|“|"|''|’’)
+# SI units are taken from https://en.wikipedia.org/wiki/International_System_of_Units
+$siunits$           = (?:m|g|A|K|mol|cd|rad|sr|Hz|N|Pa|J|W|C|V|F|Ω|S|Wb|T|H|[°º]C|lm|lx|Bq|Gy|Sv|kat)  # s (seconds) are excluded from here since they conflict with 1960s
+$siprefixes$        = (?:da|h|k|M|G|T|P|E|Z|Y|d|c|m|μ|n|p|f|a|z|y)
+$siunitp$           = $siprefixes$? $siunits$
+# other common units
+$otherunitp$        = (?:l|°|º|%|ha|dB(?:\(A\)|i)?)
+$infounitp$         = (?:[kKMGT]?(?:bps|bit(?:/sec|/s)?)|[kKMGT]B(?:/sec|/s|ps))  # |[kMG]B
+$unitp$             = $impunitp$ | $siunitp$ | $otherunitp$ | $infounitp$
+$unitspattern$      = (?: $sepstartp$ (?P<value> $startnumberp$ )\s*(?P<unit> $unitp$ )$sependtp$ )
+$timep24_hours$     = (?:[01]?[0-9]|2[0-3])
+$timep24_rest$      = (?::[0-5][0-9])
+$timep24_noampm$    = (?!:|\s*(?:(?:A|P)M|(?:a|p)m)\b)
+$timep24_M$         = (?<!:) $timep24_hours$ $timep24_rest$ $timep24_noampm$
+$timep24_S$         = (?<!:) $timep24_hours$ $timep24_rest${2} $timep24_noampm$
+$timep12_hours$     = (?:0?[1-9]|1[0-2])
+$timep12_rest$      = (?::[0-5]\d)
+$timep12_ampm$      = (?:(?:A|P)M|(?:a|p)m)
+$timep12_H$         = (?<!:) $timep12_hours$ \s* $timep12_ampm$
+$timep12_M$         = (?<!:) $timep12_hours$ $timep12_rest$ \s* $timep12_ampm$
+$timep12_S$         = (?<!:) $timep12_hours$ $timep12_rest${2} \s* $timep12_ampm$
+$timepattern$       = (?: $sepstartp$ ((?P<value> $timep12_S$ | $timep24_S$ )(?P<unit_timeofday_S>) | (?P<value> $timep12_M$ | $timep24_M$ )(?P<unit_timeofday_M>) | (?P<value> $timep12_H$ )(?P<unit_timeofday_H>))$sependtp$ )
+$shortnump$         = (?:(?!0\d)\d+[,.]\d+)
+$longnump$          = (?:[1-9]\d{0,2}(?:[\s,.]\d{3})+(?:[,.]\d+)?)
+$numstartp$         = (?<!\w[^\s]|\d\s)
+$numendp$           = (?![^\s]?\w|\s\d)
+$nump$              = $numstartp$ [+-]?(?: $shortnump$ | $longnump$ ) $numendp$
+$numpattern$        = (?: $sepstartp$ (?P<value> $nump$ )(?P<unit_none>) $sependtp$ )
+$sectionnumpattern$ = ^ \s* (?:(?!0\d)\d+[.]\d+) \s* (?=\p{Lu})  # this pattern will help to filter out section header nums from actual numbers
+
+
+[!localizer:tokenize:en]
+######################
+# This section specifies entity types that must be extracted for localization. It refers to regex variables defined in section [localizer:tokenize:common]
+# The left hand side contains entity names. The right hand side contains the corresponding variable names and/or regex expressions.
+# Each regex expression that corresponds to a entity name must match a subgroup named 'value' that contains the entity value
+# and a subgroup named 'unit' that matches the entities unit. The subgroup matches can be empty but the subgroups must be there.
+# E.g.
+# currency = (?P<value> \d+)\s?(?P<unit>USD)
+# will match entity {type: 'currency', value: '100', unit: 'USD'} in the string 'I have 100 USD.'
+#
+# To set the unit or value to an arbitrary string the string can be appended to the subgroup's name preceeded with a '_'
+# E.g.
+# time = (?P<value> \d{2}\s?(?:AM|PM))\s?(?P<unit_time12>)
+# will match entity {type: 'time', value: '12AM', unit: 'time12'} in the string 'It's 12 AM, time to get up.'
+######################
+
+currency = $currencypattern$
+unit = $unitspattern$
+time = $timepattern$
+section = (?<fail> $sectionnumpattern$)  # we filter out nums that might be section headers (the match is failed and 'num' won't proceed matching it)
+num = $numpattern$
+
+[!localizer:tokenize:et]
+######################
+# This section specifies entity types that must be extracted for localization. It refers to regex variables defined in section [localizer:tokenize:common]
+# The left hand side contains entity names. The right hand side contains the corresponding variable names and/or regex expressions.
+# Each regex expression that corresponds to a entity name must match a subgroup named 'value' that contains the entity value
+# and a subgroup named 'unit' that matches the entities unit. The subgroup matches can be empty but the subgroups must be there.
+# E.g.
+# currency = (?P<value> \d+)\s?(?P<unit>USD)
+# will match entity {type: 'currency', value: '100', unit: 'USD'} in the string 'I have 100 USD.'
+#
+# To set the unit or value to an arbitrary string the string can be appended to the subgroup's name preceeded with a '_'
+# E.g.
+# time = (?P<value> \d{2}\s?(?:AM|PM))\s?(?P<unit_time12>)
+# will match entity {type: 'time', value: '12AM', unit: 'time12'} in the string 'It's 12 AM, time to get up.'
+######################
+
+currency = $currencypattern$
+unit = $unitspattern$
+time = $timepattern$
+phone = (?<fail> \(\s* (?:00|\+)37[012] \s*\) [\s\d]* | (?:00|\+)37[012] (?! (?:\s\d{3})+(?:[,.]\d+)? $numendp$ ) [\s\d]*)  # we put this in a <fail> group, so that phones are not matched. NTT will take care of them
+section = (?<fail> $sectionnumpattern$)  # we filter out nums that might be section headers (the match is failed and 'num' won't proceed matching it)
+num = $numpattern$
+
+[!localizer:parse:en]
+
+######################################
+# CANONIZATION (default)
+######################################
+# This section contains transformation expressions that specify how to convert the extracted entities to a canonical form.
+# It refers to entities specified in the [!localizer:tokenize:<src_lang>] block.
+#
+# Every expression consists of two parts separated by a ' => '. The left hand side part specifies the matching conditions.
+# The right hand side specifies the transformation to be applied to the matched entities.
+# The matching part consists of <entity_name> VALUE(<value_condition>) UNIT(<unit_condition>)
+# The corresponding transformation is applied to all entities of type <entity_name> whose value and unit match the corresponding conditions.
+# E.g.
+# currency VALUE UNIT(eq "$") => ...
+# will match an entity {type: 'currency', value: '100', unit: '$'} (note that VALUE condition can be empty meaning that any value is accepted).
+#
+# <value_condition> and <unit_condition> each is a composition of single argument functions where each function component is separated by a ' . '.
+# The composed function takes as an input the entities value or unit accordingly and must return True or False (or a True-ish ir False-ish value in the Python sense).
+# The available functions are predefined. Note that although the function components themselves are single argument,
+# they are defined by an expression that possibly takes multiple arguments.
+# E.g.
+# VALUE(ge 2 . decimal ".", ",") matches an entity for which the function ge_2(decimal_.,(x)) return True
+# where:
+# - decimal_., is a function that converts a string with ',' as a decimal separator and '.' as a thousands separator to a float;
+# - ge_2 is a function that takes a float as an input and returns True iff it is greater or equal than 2;
+# - and x is the entities value.
+#
+# The transformation part consists of VALUE(<value_transformation>) UNIT(<unit_transformation>).
+# <value_transformation> and <unit_transformation> each is a function composition that specifies the transformation
+# that must be applied to the matched entities value and unit accordingly. The function composition expressions here take
+# the same form as <value_condition> and <unit_condition> defined in the previous paragraph.
+# E.g.
+# unit VALUE UNIT(eq "ft") => VALUE(mult 0.3048 . decimal ".", ",") UNIT(setto "m")
+# will convert an entity {type: 'unit', value: '100', unit: 'ft'} in the canonical form {type: 'unit', value: 30.48, unit: 'm'}
+#
+# The list of predefined functions that can be used as components in the function composition expressions:
+# sum(num)(x) - returns x + num
+# eq(num)(x) - returns True iff x == num
+# ge(num)(x) - returns True iff x >= num
+# lt(num)(x) - returns True iff x < num
+# contains(part)(x) - returns True iff the string x contains a substring part
+# containsany(part1, part2, ..., partn)(x) - returns True iff the string x contains any of the substrings part1 to partn
+# ampmtotime()(x) - attempts to convert a string x to a Python time object. x is assumed to be in a 12h format
+# h24totime()(x) - attempts to convert a string x to a Python time object. x is assumed to be in a 24h format
+# div(num)(x) - returns x / num
+# mult(num)(x) - returns x * num
+# floor()(x) - returns x rounded down to the nearest integer
+# decimal(decimal_sep=".", thousands_sep=",")(x) - attempts to convert a string x to a float. x is expected to have a decimal separator decimal_sep and a thousands separator thousands_sep. the default separators are "." and ","
+# decimaltostr(decimal_sep=".", thousands_sep=",")(x) - attempts to convert a float x to a string. the resulting string will have a decimal separator decimal_sep and a thousands separator thousands_sep. the default separators are "." and ","
+# roundfun(ndigits)(x) - returns x rounded to ndigits digits
+# getreminderounces()(x) - converts x from kilograms to pounds and returns the decimal part of pounds expressed in ounces
+# getpounds()(x) - converts x from kilograms to pounds
+# ctof()(x) - converts x from degrees Celsius to degrees Fahrenheit
+# setto(val)(x) - returns val
+# timeofdaytostr(sep)(x) - converts a Python time object x to a string representation with sep separating hours and minutes
+# prepend(prefix)(x) - prepends a string prefix to a string x i.e. returns prefix + x
+# startswith(prefix)(x) - returns True iff the string x starts with the string prefix
+# splitoff(sep, maxsplit=1)(x) - counts maxsplit occurances of sep in the string x and returns the part after the maxsplit'h occurance of sep
+#
+######################################
+
+#================
+# CURRENCY
+#================
+# Here are some sample transforms that parse currency entities (disabled by default).
+# currency VALUE UNIT(eq "USD") => VALUE(decimal ".", ",") UNIT(setto "USD")
+# currency VALUE UNIT(eq "$") => VALUE(decimal ".", ",") UNIT(setto "USD")
+# currency VALUE UNIT(eq "GBP") => VALUE(decimal ".", ",") UNIT(setto "GBP")
+# currency VALUE UNIT(eq "£") => VALUE(decimal ".", ",") UNIT(setto "GBP")
+# currency VALUE UNIT(eq "GBP") => VALUE(decimal ".", ",") UNIT(setto "EUR")
+# currency VALUE UNIT(eq "€") => VALUE(decimal ".", ",") UNIT(setto "EUR")
+#
+# Parse the value of all currency entities, so that we can replace the decimal separator
+# in the [!localizer:format:<trg_lang>] section
+currency VALUE UNIT => VALUE(decimal ".", ",") UNIT
+
+#================
+# TIME
+#================
+# Here are some sample transforms that parse time entities (disabled by default).
+# time VALUE(containsanyi "PM", "AM") UNIT => VALUE(ampmtotime) UNIT
+# time VALUE UNIT => VALUE(h24totime ":") UNIT
+#
+# If the above transforms are disabled, we must add a rule that simply keeps
+# the identified time entities as is
+time VALUE UNIT => VALUE UNIT
+
+#----------------
+# DEFAULT CATCH ALL
+#----------------
+# we prefix all other units with keep_ so that they can be recognized and not changed in the transformation process
+unit VALUE UNIT(startswith "keep_") => VALUE(decimal ".", ",") UNIT
+unit VALUE UNIT => VALUE(decimal ".", ",") UNIT(prepend "keep_")
+
+# CONVERT REGULAR NUMBERS AS WELL
+num VALUE UNIT => VALUE(decimal ".", ",") UNIT
+
+[!localizer:format:et]
+
+######################################
+# TRANSFORM FROM KANONIZED (default)
+######################################
+#
+# Note: The right hand side of => generally contains non-breaking spaces when specifying the format of the output string.
+#       They might not show up in your editor
+#
+# This section contains transformation expressions that specify how to convert the extracted entities from the canonical form to the target language.
+# It refers to entities which have gone through transforms in the [!localizer:parse:<src_lang>] block.
+#
+# The basic form of expressions specified here is the same as in the [!localizer:parse:<src_lang>].
+# The only difference is in the semantics of the transformation part (the right hand side of ' => ').
+# The transformation part is an arbitrary string with placeholders VALUE(<value_transformation>) and UNIT(<unit_transformation>)
+# which are replaced by the corresponding entities value and unit with <value_transformation> and <unit_transformation> applied accordingly.
+# E.g.
+# unit VALUE UNIT(eq "m") => VALUE(decimaltostr "," . roundfun 2 . mult 100) cm
+# converts a canonized entity {type: 'unit', value: 0.75426, unit: 'm'} to a string "75,43 cm"
+#
+# The list of predefined functions that can be used as components in the function composition expressions is the same
+# as defined in the [!localizer:parse:<src_lang>] block.
+######################################
+
+#=====================================
+# CURRENCY
+#=====================================
+currency VALUE UNIT => UNIT VALUE(decimaltostr ",", " ")
+
+#-------------------------------------
+# RESTORE NON KANONIZED
+#-------------------------------------
+# units that were found in the source but have not been kanonized (mostly SI units)
+unit VALUE UNIT(startswith "keep_") => VALUE(decimaltostr ",", " ") UNIT(splitoff "_", 1)
+
+#-------------------------------------
+# DEFAULT CATCH ALL
+#-------------------------------------
+unit VALUE UNIT => VALUE(decimaltostr ",", " " . roundfun 2) UNIT
+
+#-------------------------------------
+# REGULAR NUMBERS
+#-------------------------------------
+num VALUE UNIT => VALUE(decimaltostr ",", " ")
+
+
+
+[!process:pre:en]
+# mark intervals
+¬ = (?<=[\d%])[-]{1,2}(?=\d)
+¬ = (?<=°C)[-]{1,2}(?=\d)
+
+# Process nested quotes. If a text fragment with nested quotes is encountered, the outer quotes are normalized.
+δstart_quoteδ\g<inner>δend_quoteδ = (?<!\w)(?:„(?<inner>[^„“]*?(?:„[^„]*?“)?[^„]*?)“|„(?<inner>[^„”]*?(?:„[^„]*?”)?[^„]*?)”|«(?<inner>[^«»]*?(?:«[^«]*?»)?[^«]*?)»|»(?<inner>[^»«]*?(?:»[^»]*?«)?[^»]*?)«|›(?<inner>[^›‹]*?(?:›[^›]*?‹)?[^›]*?)‹|‘(?<inner>[^‘’]*?(?:‘[^‘]*?’)?[^‘]*?)’|‚(?<inner>[^‚’]*?(?:‚[^‚]*?’)?[^‚]*?)’|"(?<inner>[^"]*?(?:"[^"]*?")?[^"]*?)"|”(?<inner>[^”]*?(?:”[^”]*?”)?[^”]*?)”|’(?<inner>[^’]*?(?:’[^’]*?’)?[^’]*?)’)(?!\w)
+# Then process the quotes that are left behind - these are the inner quotes that were not processed by the previous process.
+δstart_quoteδ\g<inner>δend_quoteδ = (?<!\w)(?:„(?<inner>.*?)“|„(?<inner>.*?)”|«(?<inner>.*?)»|»(?<inner>.*?)«|›(?<inner>.*?)‹|‘(?<inner>.*?)’|‚(?<inner>.*?)’|"(?<inner>.*?)"|”(?<inner>.*?)”|’(?<inner>.*?)’)(?!\w)
+# Now replace the δ placeholders with real quotes
+“ = δstart_quoteδ
+” = δend_quoteδ
+# normalize apostrophes
+' = [‘’]
+
+[!process:pre:et]
+# mark intervals
+¬ = (?<=[\d%])[-]{1,2}(?=\d)
+¬ = (?<=°C)[-]{1,2}(?=\d)
+
+# Process nested quotes. If a text fragment with nested quotes is encountered, the outer quotes are normalized.
+δstart_quoteδ\g<inner>δend_quoteδ = (?<!\w)(?:„(?<inner>[^„“]*?(?:„[^„]*?“)?[^„]*?)“|„(?<inner>[^„”]*?(?:„[^„]*?”)?[^„]*?)”|«(?<inner>[^«»]*?(?:«[^«]*?»)?[^«]*?)»|»(?<inner>[^»«]*?(?:»[^»]*?«)?[^»]*?)«|›(?<inner>[^›‹]*?(?:›[^›]*?‹)?[^›]*?)‹|‘(?<inner>[^‘’]*?(?:‘[^‘]*?’)?[^‘]*?)’|‚(?<inner>[^‚’]*?(?:‚[^‚]*?’)?[^‚]*?)’|"(?<inner>[^"]*?(?:"[^"]*?")?[^"]*?)"|”(?<inner>[^”]*?(?:”[^”]*?”)?[^”]*?)”|’(?<inner>[^’]*?(?:’[^’]*?’)?[^’]*?)’)(?!\w)
+# Then process the quotes that are left behind - these are the inner quotes that were not processed by the previous process.
+δstart_quoteδ\g<inner>δend_quoteδ = (?<!\w)(?:„(?<inner>.*?)“|„(?<inner>.*?)”|«(?<inner>.*?)»|»(?<inner>.*?)«|›(?<inner>.*?)‹|‘(?<inner>.*?)’|‚(?<inner>.*?)’|"(?<inner>.*?)"|”(?<inner>.*?)”|’(?<inner>.*?)’)(?!\w)
+# Now replace the δ placeholders with real quotes
+“ = δstart_quoteδ
+” = δend_quoteδ
+# normalize apostrophes
+' = [‘’]
+
+[!process:post:et]
+# replace interval markers
+- = [¬]
+δstart_quoteδ = “
+δend_quoteδ = ”
+„ = δstart_quoteδ
+” = δend_quoteδ
+- = [¬]
+, = (?<=(^|\s|\(|=|\-|–)[\d%]+)[.](?=[\d]+[^\d\w])
+. = (?<=lõi[kg](u[ds])?\s[\d%]+)[,](?=[\d]+[^\d\w])
+. = (?<=lõi[kg](u[ds])?\s[\d]+[.][\d]+([,]|(\sja))\s[\d]+)[,](?=[\d]+[^\d\w])
+#lõigud 4.2, 4.4 ja 4,5
+. = (?<=lõi[kg](u[ds])?\s[\d]+[.][\d]+[,]\s[\d]+[.][\d]+\sja\s[\d]+)[,](?=[\d]+[^\d\w])
