@@ -30,3 +30,8 @@ The repository contains the following tools and resources from the project's per
 - A set of regular expression-based pre-processing, normalisation, tokenisation, and post-processing rules that improve word alignment of non-translatable identifiers and numerals for all languages. The rules provide special cases for handling of Estonian - [Improvements to Word Alignment and Tokenisation of Estonian Texts](EstonianTokenisationImprovements.md).
 - A sample configuration template that describes the [Nematus](https://github.com/rsennrich/nematus) NMT system training set-up for the English-Estonian-English and Russian-Estonian-Russian systems within the project can be found in [nematus-nmt-config-template.md](nematus-nmt-config-template.md).
 
+## Project period of 2017
+
+The repository contains the following tools and resources from the project's period of 2017:
+
+- Tilde Tõlge Android app with the capability to translate selected text from any other application where text is selectable.
