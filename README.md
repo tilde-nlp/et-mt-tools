@@ -34,4 +34,4 @@ The repository contains the following tools and resources from the project's per
 
 The repository contains the following tools and resources from the project's period of 2017:
 
-- Tilde Tõlge Android app with the capability to translate selected text from any other application where text is selectable.
+- Tilde Tõlge [Android app](https://github.com/tilde-nlp/et-mt-tools/tree/master/TildeTolge) with the capability to translate selected text from any other application where text is selectable.
